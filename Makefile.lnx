@@ -18,8 +18,8 @@ TARGET1 = colors
 TARGET2 = green
 TARGET3 = useanalysis
 TARGETS = useanalysis green colors analysis
-RMTARGETS = src/green src/colors src/analysis
-all: $(TARGETS) analysis
+RMTARGETS = src/green src/colors src/analysis cterm
+all: $(TARGETS) cterm
 src/$(TARGET1)$(EEXT): src/$(TARGET1).c
 	$(CC) $(CPPFLAGS) src/$(TARGET1).c  -o src/colors $(LDFLAGS)
 $(TARGET1): src/$(TARGET1)$(EEXT)
@@ -34,6 +34,8 @@ src/useanalysis$(EEXT): src/analysis$(OEXT) src/useanalysis$(OEXT)
 	$(LD) $? -o src/analysis$(EEXT) $(LDFLAGS)
 useanalysis: src/useanalysis$(EEXT)
 analysis: useanalysis
+cterm: src/green
+	$(CP) $< $@
 install: all
 	mv $(RMTARGETS) bin
 .PHONY: clean distclean 

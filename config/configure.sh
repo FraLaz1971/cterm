@@ -29,8 +29,8 @@ do
 	a=$(($a+1))
 done
 echo 'TARGETS' = $TARGETS
-echo 'RMTARGETS' = $RMTARGETS
-echo 'all: $(TARGETS) analysis'
+echo 'RMTARGETS' = $RMTARGETS cterm
+echo 'all: $(TARGETS) cterm'
 a=0
 for s in $(ls -1 src/*.c)
 do
@@ -52,7 +52,9 @@ echo 'src/useanalysis$(EEXT): src/analysis$(OEXT) src/useanalysis$(OEXT)'
 echo -e "\t"'$(LD) $? -o src/analysis$(EEXT) $(LDFLAGS)'
 echo 'useanalysis: src/useanalysis$(EEXT)'
 echo 'analysis: useanalysis'
-echo 'echo created all targets' >/dev/stderr
+echo 'cterm: src/green'
+echo -e "\t"'$(CP) $< $@'
+echo 'echo created all targets' >&2
 echo 'install: all'
 echo -e '\tmv $(RMTARGETS) bin'
 echo '.PHONY: clean distclean '
@@ -60,6 +62,6 @@ echo 'clean: '
 echo -e "\t"'rm -f $(OBJ) $(RMTARGETS)'
 echo 'distclean: clean'
 echo -e "\trm -f bin/* Makefile* *.fit *.fits *.csv *.ssv *.tsv *.dat *.txt *.log"
-echo "generating dirs" >/dev/stderr
+echo "generating dirs" >&2
 if ! test -d bin; then mkdir  bin; fi
 if ! test -d obj; then mkdir  obj; fi
